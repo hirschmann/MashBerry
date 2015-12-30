@@ -7,7 +7,7 @@ class QSSRrelay : public QThread
 {
     Q_OBJECT
 public:
-    explicit QSSRrelay(QObject *parent = 0) :QThread(parent) {};
+    explicit QSSRrelay(QObject *parent = 0) : QThread(parent) {};
     virtual void Start() = 0;
     virtual void SetPower(int power) = 0;
 

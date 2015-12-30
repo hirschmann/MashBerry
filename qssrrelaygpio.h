@@ -8,7 +8,7 @@ class QSSRrelayGPIO : public QSSRrelay
 {
     Q_OBJECT
 public:
-    explicit QSSRrelayGPIO(int ssr, QObject *parent = 0);
+    explicit QSSRrelayGPIO(int ssr, bool activeLow = false, QObject *parent = 0);
     ~QSSRrelayGPIO();
 
     virtual void Start();
@@ -25,6 +25,7 @@ private:
     QGpio m_gpio;
     int m_power;
     bool m_bEndThread;
+    bool m_bActiveLow;
 };
 
 #endif // QSSRRELAYGPIO_H

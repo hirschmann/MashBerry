@@ -7,7 +7,7 @@ QSSRrelayFactory::QSSRrelayFactory(QObject *parent) :
 {
 }
 
-QSSRrelay* QSSRrelayFactory::GetSSRrelay(int ssr)
+QSSRrelay* QSSRrelayFactory::GetSSRrelay(int ssr, bool activeLow)
 {
     int gpio;
     QFile ssrKernel(QString("/sys/devices/platform/ssr_plug.0/ssr_%1").arg(ssr));
@@ -15,7 +15,7 @@ QSSRrelay* QSSRrelayFactory::GetSSRrelay(int ssr)
     if(ssrKernel.open(QIODevice::WriteOnly))
     {
         ssrKernel.close();
-        return new QSSRrelayKernel(ssr, this);
+        return new QSSRrelayKernel(ssr, activeLow, this);
     }
     else
     {
@@ -24,6 +24,6 @@ QSSRrelay* QSSRrelayFactory::GetSSRrelay(int ssr)
         else
             gpio = 24;
 
-        return new QSSRrelayGPIO(gpio, this);
+        return new QSSRrelayGPIO(gpio, activeLow,this);
     }
 }

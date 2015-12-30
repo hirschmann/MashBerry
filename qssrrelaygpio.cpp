@@ -1,10 +1,12 @@
 #include "qssrrelaygpio.h"
 
-QSSRrelayGPIO::QSSRrelayGPIO(int gpio, QObject *parent) :
+QSSRrelayGPIO::QSSRrelayGPIO(int gpio, bool activeLow, QObject *parent) :
     QSSRrelay(parent)
 {
+    m_bActiveLow = activeLow;
     m_gpio.Open(gpio, true);
-    m_gpio.Set(0);
+    int power = activeLow ? 100 : 0;
+    m_gpio.Set(power);
 }
 
 QSSRrelayGPIO::~QSSRrelayGPIO()
@@ -21,7 +23,14 @@ void QSSRrelayGPIO::Start()
 
 void QSSRrelayGPIO::SetPower(int power)
 {
-    m_power = power;
+    if(m_bActiveLow)
+    {
+        m_power = 100 - power;
+    }
+    else
+    {
+        m_power = power;
+    }
 }
 
 void QSSRrelayGPIO::run()
