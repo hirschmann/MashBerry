@@ -77,7 +77,6 @@ void QRecipeManager::ModifyRecipe(QRecipe *pRec)
 void QRecipeManager::stripRecipeEntries(QRecipe *pRec, int newcount)
 {
     int i,cnt;
-    QRecipeEntry *pRecEntry;
 
     cnt = pRec->GetEntryCount();
     for(i = cnt; i>newcount; i--)

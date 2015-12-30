@@ -118,7 +118,7 @@ double QTempSensorDS18B20::ReadTemp()
     if(m_fname)
     {
         m_fd = fopen(m_fname, "rb");
-        if(m_fd > 0)
+        if(m_fd != NULL)
         {
             fscanf(m_fd, "%*[^t]t=%u", &i);
             fclose(m_fd);

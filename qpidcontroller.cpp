@@ -299,7 +299,6 @@ void QPidController::Endbeep()
 
 void QPidController::run()
 {
-    char power[8];
     int lastPower = -1;
     double tmin = 100;
     double tmax = 0;

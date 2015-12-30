@@ -272,6 +272,8 @@ void QWebUi::serviceRecipes(HttpRequest& request, HttpResponse& response)
         case FB_ATUNE:
             serviceRecipeATune(request, response);
             break;
+        default:
+            break;
     }
 }
 
@@ -425,7 +427,7 @@ void QWebUi::serviceRecipeEdit(HttpRequest& request, HttpResponse& response, TFo
     int entrycount;
     int recError = -1;
     QString strStep;
-    QRecipe *pRec;
+    QRecipe *pRec = NULL;
     QRecipe *pOrigRec = NULL;
 
     QRecipeEntry *pRecEntry;
