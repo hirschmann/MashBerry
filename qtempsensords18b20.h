@@ -21,16 +21,21 @@ class QTempSensorDS18B20 : public QTempSensor
     Q_OBJECT
 public:
     explicit QTempSensorDS18B20(QObject *parent = 0);
+    QTempSensorDS18B20(QString filename);
     ~QTempSensorDS18B20();
     virtual int Open();
     virtual double ReadTemp();
     virtual int GetSampleTime();
+
+    static QList<QTempSensorDS18B20*> GetAllSensors();
 
 signals:
     
 public slots:
 
 private:
+    static QStringList GetSensorPaths();
+
     FILE *m_fd;
     char *m_fname;
     double m_lastTemp;

@@ -35,6 +35,13 @@ QTempSensorDS18B20::QTempSensorDS18B20(QObject *parent) :
     m_lastTemp = 25.0;
 }
 
+QTempSensorDS18B20::QTempSensorDS18B20(QString filename) :
+    QTempSensor()
+{
+    m_fname = new char[filename.length() + 1];
+    strcpy(m_fname, filename.toStdString().c_str());
+}
+
 QTempSensorDS18B20::~QTempSensorDS18B20()
 {
     if(m_fname != NULL)
@@ -43,10 +50,47 @@ QTempSensorDS18B20::~QTempSensorDS18B20()
 
 int QTempSensorDS18B20::Open()
 {
+    if(m_fname != NULL)
+    {
+        return 0;
+    }
+
+    QStringList list = GetSensorPaths();
+
+    if(list.isEmpty())
+    {
+        printf("couldn't find ds18b20 device\n");
+        return 1;
+    }
+    else
+    {
+        QString fname = list.first();
+        m_fname = new char[fname.length() + 1];
+        strcpy(m_fname, fname.toStdString().c_str());
+        return 0;
+    }
+}
+
+QList<QTempSensorDS18B20*> QTempSensorDS18B20::GetAllSensors()
+{
+    QList<QTempSensorDS18B20*> list;
+
+    foreach(QString path, GetSensorPaths())
+    {
+        list.append(new QTempSensorDS18B20(path));
+    }
+
+    return list;
+}
+
+QStringList QTempSensorDS18B20::GetSensorPaths()
+{
+    QStringList list;
+    QString fname;
+
 #ifndef Q_OS_WIN
     QDir dir("/sys/bus/w1/devices/");
     QStringList dirlist;
-    QString fname;
     int i,cnt;
 
     dirlist = dir.entryList(QDir::Dirs|QDir::System|QDir::Files|QDir::NoDotAndDotDot);
@@ -57,20 +101,12 @@ int QTempSensorDS18B20::Open()
         fname = dirlist[i];
         if(fname != "w1_bus_master1" && fname.contains("-"))
         {
-            fname = dir.absoluteFilePath(fname) + "/w1_slave";
-            m_fname = new char[fname.length()+1];
-            strcpy(m_fname, fname.toStdString().c_str());
-            break;
+            list.append(dir.absoluteFilePath(fname) + "/w1_slave");
         }
     }
-
-    if (m_fname == NULL)
-    {
-        printf("couldn't find ds18b20 device\n");
-        return 1;
-    }
 #endif
-    return 0;
+
+    return list;
 }
 
 double QTempSensorDS18B20::ReadTemp()
