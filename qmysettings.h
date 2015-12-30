@@ -45,6 +45,7 @@ public:
     QString GetLanguage();
     QString GetSensorName();
     bool IsSinglePIDparam();
+    bool IsSSRActiveLow();
 
 signals:
     
@@ -55,6 +56,7 @@ public slots:
     void SetSensorName(QString name, bool saveSettings);
     void SetLanguage(QString lang, bool saveSettings);
     void SetSinglePIDparam(bool single, bool saveSettings);
+    void SetSSRActiveLow(bool activeLow, bool saveSettings);
     void SaveSettings();
 
 protected:
@@ -67,6 +69,7 @@ private:
     QString m_Sensor;
     QString m_lang;
     bool m_singlePIDparam;
+    bool m_ssrActiveLow;
 };
 
 #endif // QMYSETTINGS_H

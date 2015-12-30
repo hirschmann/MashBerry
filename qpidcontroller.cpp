@@ -302,8 +302,9 @@ void QPidController::run()
 
     QSSRrelay *ssr;
     QSSRrelayFactory SsrFactory;
-    ssr = SsrFactory.GetSSRrelay(1);
+    ssr = SsrFactory.GetSSRrelay(1, m_pSettings->IsSSRActiveLow());
     ssr->Start();
+
 
     if(m_pTempSensor->GetSampleTime() > 5)
     {

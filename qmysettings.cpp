@@ -186,6 +186,18 @@ bool QMySettings::IsSinglePIDparam()
     return m_singlePIDparam;
 }
 
+void QMySettings::SetSSRActiveLow(bool activeLow, bool saveSettings)
+{
+    m_ssrActiveLow = activeLow;
+    if(saveSettings)
+        SaveSettings();
+}
+
+bool QMySettings::IsSSRActiveLow()
+{
+    return m_ssrActiveLow;
+}
+
 void QMySettings::LoadSettings()
 {
     XMLElement *akt;
@@ -234,6 +246,14 @@ void QMySettings::LoadSettings()
             }
             else
                 m_singlePIDparam = true;
+
+            akt = set->FirstChildElement("SSRActiveLow");
+            if(akt != NULL)
+            {
+                m_ssrActiveLow = atoi(akt->GetText());
+            }
+            else
+                m_ssrActiveLow = false;
         }
     }
     delete doc;
@@ -288,6 +308,10 @@ void QMySettings::SaveSettings()
 
     elem = doc->NewElement("SinglePIDparam");
     elem->InsertFirstChild(doc->NewText(QString("%1").arg(m_singlePIDparam).toAscii()));
+    element->InsertEndChild(elem);
+
+    elem = doc->NewElement("SSRActiveLow");
+    elem->InsertFirstChild(doc->NewText(QString("%1").arg(m_ssrActiveLow).toAscii()));
     element->InsertEndChild(elem);
 
     element = element->InsertEndChild( doc->NewElement( "PID" ) );
