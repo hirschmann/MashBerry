@@ -73,14 +73,21 @@ void QPidController::InitTempSensor()
 {
     if(m_pSettings->GetSensorName() == "PT1000")
     {
-        m_pTempSensor = new QTempSensorPT1000(this);
+        m_pTempSensors.append(new QTempSensorPT1000(this));
     }
     else
     {
-        m_pTempSensor = new QTempSensorDS18B20(this);
+        foreach(QTempSensorDS18B20* s, QTempSensorDS18B20::GetAllSensors())
+        {
+            m_pTempSensors.append(s);
+            s->Open();
+        }
+    }    
+
+    if(!m_pTempSensors.isEmpty())
+    {
+        m_pPID->SetSampleTime(m_pTempSensors.first()->GetSampleTime() * 1000);
     }
-    m_pTempSensor->Open();
-    m_pPID->SetSampleTime(m_pTempSensor->GetSampleTime() * 1000);
 }
 
 void QPidController::Beep(int msec)
@@ -305,14 +312,14 @@ void QPidController::run()
     ssr = SsrFactory.GetSSRrelay(1);
     ssr->Start();
 
-    if(m_pTempSensor->GetSampleTime() > 5)
+    if(m_pTempSensors.first()->GetSampleTime() > 5)
     {
-        cyclewaittime = m_pTempSensor->GetSampleTime() / 2;
+        cyclewaittime = m_pTempSensors.first()->GetSampleTime() / 2;
         SkipCycles = true;
     }
     else
     {
-        cyclewaittime = m_pTempSensor->GetSampleTime();
+        cyclewaittime = m_pTempSensors.first()->GetSampleTime();
         SkipCycles = false;
     }
 
@@ -323,7 +330,7 @@ void QPidController::run()
     while(!m_bEndThread)
     {
         m_CtrlMutex.lock();
-        m_AktTemp = m_pTempSensor->ReadTemp();
+        m_AktTemp = GetTemp();
 
         if(m_AktTemp > tmax)
             tmax = m_AktTemp;
@@ -436,6 +443,20 @@ void QPidController::run()
 void QPidController::EndThread()
 {
     m_bEndThread = true;
+}
+
+double QPidController::GetTemp()
+{
+    int count = 0;
+    double temp = 0;
+
+    foreach(QTempSensor* s, m_pTempSensors)
+    {
+        temp += s->ReadTemp();
+        count++;
+    }
+
+    return temp / count;
 }
 
 void QPidController::LogTemp()

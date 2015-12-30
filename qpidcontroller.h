@@ -59,6 +59,7 @@ protected:
     void InitTempSensor();
     bool ActivateRecipeStep(int idx);
     void StartAtune(bool single, double Setpoint = 0);
+    double GetTemp();
     void LogTemp();
     void DoAutotune();
     void SkipTunedRecipeSteps();
@@ -84,7 +85,7 @@ private:
 
     PID         *m_pPID;
     PID_ATune   *m_pATune;   
-    QTempSensor *m_pTempSensor;
+    QList<QTempSensor*> m_pTempSensors;
     QRecipe     *m_pRecipe;
     QRecipeEntry *m_pAktRecipeStep;
     QGpio       m_beeperGpio;
