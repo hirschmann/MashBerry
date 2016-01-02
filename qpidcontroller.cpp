@@ -451,7 +451,7 @@ double QPidController::GetTemp()
 
     foreach(QTempSensor* s, m_pTempSensors)
     {
-        temp += s->ReadTemp();
+        temp += m_tempFilter.FilterTepmerature(s->ReadTemp());
         count++;
     }
 

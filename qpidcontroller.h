@@ -24,6 +24,7 @@
 #include "qrecipe.h"
 #include "qmysettings.h"
 #include "qgpio.h"
+#include "qtempfilter.h"
 
 #define dbgout qDebug
 //#define dbgout printf
@@ -86,6 +87,7 @@ private:
     PID         *m_pPID;
     PID_ATune   *m_pATune;   
     QList<QTempSensor*> m_pTempSensors;
+    QTempFilter m_tempFilter;
     QRecipe     *m_pRecipe;
     QRecipeEntry *m_pAktRecipeStep;
     QGpio       m_beeperGpio;
