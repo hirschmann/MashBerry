@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     qgpio.cpp \
     qssrrelayfactory.cpp \
     qssrrelaygpio.cpp \
-    qssrrelaykernel.cpp
+    qssrrelaykernel.cpp \
+    qtempfilter.cpp
 
 HEADERS  += mainwindow.h \
     PID/PID_v1.h \
@@ -76,7 +77,8 @@ HEADERS  += mainwindow.h \
     qssrrelay.h \
     qssrrelayfactory.h \
     qssrrelaygpio.h \
-    qssrrelaykernel.h
+    qssrrelaykernel.h \
+    qtempfilter.h
 
 FORMS    += mainwindow.ui
 
