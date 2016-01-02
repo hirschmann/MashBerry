@@ -9,7 +9,7 @@ class QTempFilter : public QObject
     Q_OBJECT
 public:
     explicit QTempFilter(QObject *parent = 0);
-    double FilterTepmerature(double temperature);
+    double FilterTemperature(double temperature);
 
 signals:
 

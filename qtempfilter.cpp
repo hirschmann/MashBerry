@@ -4,7 +4,7 @@ QTempFilter::QTempFilter(QObject *parent) : QObject(parent)
 {
 }
 
-double QTempFilter::FilterTepmerature(double temperature)
+double QTempFilter::FilterTemperature(double temperature)
 {
     int temp = (int)(temperature * PRECISION_FACTOR);
 
@@ -12,13 +12,13 @@ double QTempFilter::FilterTepmerature(double temperature)
         && (m_consecOutliers < OUTLIERS_LIMIT))
     {
         m_consecOutliers++;
-        return m_queue.last();
+        return m_queue.last() / (double)PRECISION_FACTOR;
     }
     else
     {
         m_consecOutliers = 0;
         AddTemperature(temp);
-        return temp;
+        return temperature;
     }
 }
 
