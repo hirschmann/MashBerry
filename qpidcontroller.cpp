@@ -88,6 +88,10 @@ void QPidController::InitTempSensor()
     {
         m_pPID->SetSampleTime(m_pTempSensors.first()->GetSampleTime() * 1000);
     }
+    else
+    {
+        m_pPID->SetSampleTime(1000);
+    }
 }
 
 void QPidController::Beep(int msec)
@@ -303,6 +307,7 @@ void QPidController::run()
     double tmin = 100;
     double tmax = 0;
     bool lastCycleSkipped = true;
+    int sampletime = 10;
     bool SkipCycles;
     int cyclewaittime;
 
@@ -311,14 +316,19 @@ void QPidController::run()
     ssr = SsrFactory.GetSSRrelay(1, m_pSettings->IsSSRActiveLow());
     ssr->Start();
 
-    if(m_pTempSensors.first()->GetSampleTime() > 5)
+    if(!m_pTempSensors.isEmpty())
     {
-        cyclewaittime = m_pTempSensors.first()->GetSampleTime() / 2;
+        sampletime = m_pTempSensors.first()->GetSampleTime();
+    }
+
+    if(sampletime > 5)
+    {
+        cyclewaittime = sampletime / 2;
         SkipCycles = true;
     }
     else
     {
-        cyclewaittime = m_pTempSensors.first()->GetSampleTime();
+        cyclewaittime = sampletime;
         SkipCycles = false;
     }
 
@@ -455,7 +465,14 @@ double QPidController::GetTemp()
         count++;
     }
 
-    return temp / count;
+    if(count == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return temp / count;
+    }
 }
 
 void QPidController::LogTemp()
