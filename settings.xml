@@ -2,6 +2,7 @@
     <Sensor>PT1000</Sensor>
     <Language>eng</Language>
     <SinglePIDparam>1</SinglePIDparam>
+    <SSRActiveLow>1</SSRActiveLow>
     <PID>
         <PIDParams>
             <Temp>60</Temp>
